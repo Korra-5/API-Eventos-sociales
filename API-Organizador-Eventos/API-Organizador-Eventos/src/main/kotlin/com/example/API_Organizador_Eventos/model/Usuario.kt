@@ -21,5 +21,5 @@ data class Usuario(
     var comunidades: List<Comunidad> = mutableListOf(),
 
     @ManyToMany(mappedBy = "participantes")
-    var actividades: Set<Actividad> = mutableSetOf()
+    var actividades: List<Actividad> = mutableListOf()
 )

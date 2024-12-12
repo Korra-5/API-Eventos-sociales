@@ -39,6 +39,7 @@ class SecurityConfig {
             .csrf { csrf -> csrf.disable() }
             .authorizeHttpRequests { auth -> auth
                 .requestMatchers("/usuarios/login").permitAll()
+                .requestMatchers("/usuarios/signup").permitAll()
                 .requestMatchers("/actividad/crearActividad").authenticated()
 
             }

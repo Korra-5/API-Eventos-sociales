@@ -13,10 +13,8 @@ import java.util.*
 @Service
 class TokenService {
 
-
     @Autowired
     private lateinit var jwtEncoder: JwtEncoder
-
 
     fun generarToken(authentication: Authentication) : String {
 

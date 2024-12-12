@@ -52,4 +52,14 @@ class UsuarioController {
         )
     }
 
+
+
+    @PostMapping("/signup")
+    fun signup(@RequestBody usuario: Usuario) : ResponseEntity<Any>? {
+
+        usuarioService.registrarUsuario(usuario)
+
+        return ResponseEntity(usuario, HttpStatus.CREATED)
+    }
+
 }
