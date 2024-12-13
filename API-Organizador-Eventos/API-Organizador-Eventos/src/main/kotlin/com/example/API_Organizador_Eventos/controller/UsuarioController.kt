@@ -32,10 +32,11 @@ class UsuarioController {
 
     @PostMapping("/login")
     fun login(@RequestBody usuario: Usuario) : ResponseEntity<Any>? {
-
+        println(usuario)
         val authentication: Authentication
         try {
             authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(usuario.username, usuario.password))
+            println(authentication.details)
         } catch (e: AuthenticationException) {
             return ResponseEntity(mapOf("mensaje" to "Credenciales incorrectas dude"), HttpStatus.UNAUTHORIZED)
         }

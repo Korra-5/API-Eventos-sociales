@@ -27,7 +27,6 @@ class UsuarioService : UserDetailsService {
             .findByUsername(username!!)
             .orElseThrow()
 
-
         return User.builder()
             .username(usuario.username)
             .password(usuario.password)

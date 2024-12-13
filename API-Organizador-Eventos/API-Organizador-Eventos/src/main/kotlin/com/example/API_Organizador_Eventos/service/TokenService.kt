@@ -20,7 +20,7 @@ class TokenService {
 
         val roles: String = authentication.authorities
             .map { it.authority }
-            .joinToString(" ") // Contiene los roles del usuario
+            .joinToString(" ")
 
         val payload: JwtClaimsSet = JwtClaimsSet.builder()
             .issuer("self")

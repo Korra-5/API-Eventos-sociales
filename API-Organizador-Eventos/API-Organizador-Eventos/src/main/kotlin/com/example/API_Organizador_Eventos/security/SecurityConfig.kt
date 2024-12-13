@@ -40,7 +40,15 @@ class SecurityConfig {
             .authorizeHttpRequests { auth -> auth
                 .requestMatchers("/usuarios/login").permitAll()
                 .requestMatchers("/usuarios/signup").permitAll()
-                .requestMatchers("/actividad/crearActividad").authenticated()
+                .requestMatchers("/actividad/crearActividad").permitAll()
+                .requestMatchers("/comunidad/crearComunidad").permitAll()
+                .requestMatchers("/actividad/crearActividad").permitAll()
+                .requestMatchers(HttpMethod.DELETE,"/comunidad/deleteComunidad").permitAll()
+                .requestMatchers(HttpMethod.DELETE,"/actividad/deleteActividad").permitAll()
+                .requestMatchers("/comunidad/cambiarNombreComunidad").permitAll()
+                .requestMatchers("/actividad/cambiarNombreActividad").permitAll()
+                .requestMatchers("/comunidad/getDescripcionComunidad").permitAll()
+                .requestMatchers("/actividad/getDescripcionActividad").permitAll()
 
             }
 
