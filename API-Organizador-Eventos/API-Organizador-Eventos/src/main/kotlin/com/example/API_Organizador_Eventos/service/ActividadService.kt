@@ -2,6 +2,7 @@ package com.example.API_Organizador_Eventos.service
 
 import com.example.API_Organizador_Eventos.model.Actividad
 import com.example.API_Organizador_Eventos.repository.ActividadRepository
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -38,4 +39,22 @@ class ActividadService {
             throw NoSuchElementException("Actividad con id $id no encontrada")
         }
     }
+
+    fun updateActividad(actividad: Actividad): Actividad {
+        val actividadExistente = actividadRepository.findById(actividad.id ?: throw IllegalArgumentException("ID no puede ser nulo"))
+            .orElseThrow { EntityNotFoundException("Actividad con id ${actividad.id} no encontrada") }
+
+        actividadExistente.apply {
+            nombre = actividad.nombre
+            descripcion = actividad.descripcion
+            fecha = actividad.fecha
+            lugar = actividad.lugar
+            organizador = actividad.organizador
+            comunidad = actividad.comunidad
+            participantes = actividad.participantes
+        }
+
+        return actividadRepository.save(actividadExistente)
+    }
+
 }

@@ -45,10 +45,10 @@ class SecurityConfig {
                 .requestMatchers("/actividad/crearActividad").permitAll()
                 .requestMatchers(HttpMethod.DELETE,"/comunidad/deleteComunidad").permitAll()
                 .requestMatchers(HttpMethod.DELETE,"/actividad/deleteActividad").permitAll()
-                .requestMatchers("/comunidad/cambiarNombreComunidad").permitAll()
-                .requestMatchers("/actividad/cambiarNombreActividad").permitAll()
-                .requestMatchers("/comunidad/getDescripcionComunidad").permitAll()
-                .requestMatchers("/actividad/getDescripcionActividad").permitAll()
+                .requestMatchers(HttpMethod.PUT,"/comunidad/updateComunidad").permitAll()
+                .requestMatchers("/actividad/updateActividad").permitAll()
+                .requestMatchers("/comunidad/getComunidad").permitAll()
+                .requestMatchers("/actividad/getActividad").permitAll()
 
             }
 

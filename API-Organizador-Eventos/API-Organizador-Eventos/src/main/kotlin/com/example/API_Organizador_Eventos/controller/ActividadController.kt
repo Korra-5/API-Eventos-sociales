@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -53,8 +54,8 @@ class ActividadController {
 
     }
 
-    @GetMapping("/getDescripcionActividad")
-    fun getDescripcionActividad(@RequestBody id: Long) : ResponseEntity<Any>? {
+    @GetMapping("/getActividad")
+    fun getActividad(@RequestBody id: Long) : ResponseEntity<Any>? {
 
         try {
             val actividad=actividadService.getActividad(id)
@@ -64,6 +65,18 @@ class ActividadController {
             return ResponseEntity(mapOf("mensaje" to "Fallo buscando la actividad"), HttpStatus.UNAUTHORIZED)
         }
 
+
+    }
+
+    @PutMapping("/updateActividad")
+    fun updateActividad(@RequestBody actividad: Actividad) : ResponseEntity<Any>? {
+        try {
+            val act=actividadService.updateActividad(actividad)
+            return ResponseEntity(act, HttpStatus.OK)
+
+        }catch (e:Exception){
+            return ResponseEntity(mapOf("mensaje" to "Fallo actualizando la actividad"), HttpStatus.UNAUTHORIZED)
+        }
 
     }
 

@@ -22,6 +22,7 @@ class UsuarioService : UserDetailsService {
     @Autowired
     private lateinit var usuarioRepository: UsuarioRepository
 
+    @Override
     override fun loadUserByUsername(username: String?): UserDetails {
         var usuario: Usuario = usuarioRepository
             .findByUsername(username!!)
@@ -31,7 +32,7 @@ class UsuarioService : UserDetailsService {
             .username(usuario.username)
             .password(usuario.password)
             .roles(usuario.roles)
-            .build( )
+            .build()
     }
 
 
