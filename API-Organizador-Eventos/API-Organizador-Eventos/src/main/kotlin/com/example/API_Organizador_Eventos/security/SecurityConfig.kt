@@ -46,7 +46,7 @@ class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE,"/comunidad/deleteComunidad").permitAll()
                 .requestMatchers(HttpMethod.DELETE,"/actividad/deleteActividad").permitAll()
                 .requestMatchers(HttpMethod.PUT,"/comunidad/updateComunidad").permitAll()
-                .requestMatchers("/actividad/updateActividad").permitAll()
+                .requestMatchers(HttpMethod.PUT,"/actividad/updateActividad").permitAll()
                 .requestMatchers("/comunidad/getComunidad").permitAll()
                 .requestMatchers("/actividad/getActividad").permitAll()
 

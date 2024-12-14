@@ -1,5 +1,6 @@
 package com.example.API_Organizador_Eventos.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 import java.util.*
@@ -18,11 +19,13 @@ data class Usuario(
     @Column(nullable = false)
     var password: String? = null,
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "creador", cascade = [CascadeType.ALL], orphanRemoval = true)
+    // Elimina las referencias directas a listas completas
+    // Usa JsonIgnore para prevenir serialización recursiva
+    @OneToMany(mappedBy = "creador")
+    @JsonIgnore
     var comunidades: List<Comunidad> = mutableListOf(),
 
-    @JsonManagedReference
     @ManyToMany(mappedBy = "participantes")
+    @JsonIgnore
     var actividades: List<Actividad> = mutableListOf()
 )
