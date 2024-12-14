@@ -40,15 +40,15 @@ class SecurityConfig {
             .authorizeHttpRequests { auth -> auth
                 .requestMatchers("/usuarios/login").permitAll()
                 .requestMatchers("/usuarios/signup").permitAll()
-                .requestMatchers("/actividad/crearActividad").permitAll()
-                .requestMatchers("/comunidad/crearComunidad").permitAll()
-                .requestMatchers("/actividad/crearActividad").permitAll()
-                .requestMatchers(HttpMethod.DELETE,"/comunidad/deleteComunidad").permitAll()
-                .requestMatchers(HttpMethod.DELETE,"/actividad/deleteActividad").permitAll()
-                .requestMatchers(HttpMethod.PUT,"/comunidad/updateComunidad").permitAll()
-                .requestMatchers(HttpMethod.PUT,"/actividad/updateActividad").permitAll()
-                .requestMatchers("/comunidad/getComunidad").permitAll()
-                .requestMatchers("/actividad/getActividad").permitAll()
+                .requestMatchers("/actividad/crearActividad").authenticated()
+                .requestMatchers("/comunidad/crearComunidad").authenticated()
+                .requestMatchers("/actividad/crearActividad").authenticated()
+                .requestMatchers(HttpMethod.DELETE,"/comunidad/deleteComunidad").authenticated()
+                .requestMatchers(HttpMethod.DELETE,"/actividad/deleteActividad").authenticated()
+                .requestMatchers(HttpMethod.PUT,"/comunidad/updateComunidad").authenticated()
+                .requestMatchers(HttpMethod.PUT,"/actividad/updateActividad").authenticated()
+                .requestMatchers("/comunidad/getComunidad").authenticated()
+                .requestMatchers("/actividad/getActividad").authenticated()
 
             }
 

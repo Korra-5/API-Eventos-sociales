@@ -19,8 +19,6 @@ data class Usuario(
     @Column(nullable = false)
     var password: String? = null,
 
-    // Elimina las referencias directas a listas completas
-    // Usa JsonIgnore para prevenir serialización recursiva
     @OneToMany(mappedBy = "creador")
     @JsonIgnore
     var comunidades: List<Comunidad> = mutableListOf(),

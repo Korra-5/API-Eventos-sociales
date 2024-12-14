@@ -23,6 +23,6 @@ data class Comunidad(
     var fechaCreacion: Date = Date(),
 
     @OneToMany(mappedBy = "comunidad", cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JsonIgnore  // O usa DTO para transferencia
+    @JsonIgnore
     var actividades: List<Actividad> = mutableListOf()
 )
