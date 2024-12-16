@@ -40,6 +40,7 @@ class SecurityConfig {
             .authorizeHttpRequests { auth -> auth
                 .requestMatchers("/usuarios/login").permitAll()
                 .requestMatchers("/usuarios/signup").permitAll()
+                .requestMatchers(HttpMethod.DELETE,"/usuarios/deleteUsuario").permitAll()
                 .requestMatchers("/actividad/crearActividad").authenticated()
                 .requestMatchers("/comunidad/crearComunidad").authenticated()
                 .requestMatchers("/actividad/crearActividad").authenticated()
@@ -47,8 +48,8 @@ class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE,"/actividad/deleteActividad").authenticated()
                 .requestMatchers(HttpMethod.PUT,"/comunidad/updateComunidad").authenticated()
                 .requestMatchers(HttpMethod.PUT,"/actividad/updateActividad").authenticated()
-                .requestMatchers("/comunidad/getComunidad").authenticated()
-                .requestMatchers("/actividad/getActividad").authenticated()
+                .requestMatchers("/comunidad/getComunidad").permitAll()
+                .requestMatchers("/actividad/getActividad").permitAll()
 
             }
 

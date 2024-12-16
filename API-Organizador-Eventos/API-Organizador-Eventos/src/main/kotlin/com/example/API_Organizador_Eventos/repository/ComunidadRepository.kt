@@ -9,5 +9,4 @@ import java.util.*
 @Repository
 interface ComunidadRepository : JpaRepository<Comunidad, Long> {
     fun findComunidadById(id: Long): Optional<Comunidad>
-
 }

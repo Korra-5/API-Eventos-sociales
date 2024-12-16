@@ -10,15 +10,12 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 @RequestMapping("/usuarios")
 class UsuarioController {
-
 
     @Autowired
     private lateinit var usuarioService: UsuarioService
@@ -29,20 +26,18 @@ class UsuarioController {
     @Autowired
     private lateinit var tokenService: TokenService
 
-
     @PostMapping("/login")
-    fun login(@RequestBody usuario: Usuario) : ResponseEntity<Any>? {
+    fun login(@RequestBody usuario: Usuario): ResponseEntity<Any>? {
         println(usuario)
         val authentication: Authentication
         try {
             authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(usuario.username, usuario.password))
             println(authentication.details)
         } catch (e: AuthenticationException) {
-            return ResponseEntity(mapOf("mensaje" to "Credenciales incorrectas dude"), HttpStatus.UNAUTHORIZED)
+            return ResponseEntity(mapOf("mensaje" to "Credenciales incorrectas"), HttpStatus.UNAUTHORIZED)
         }
 
-        var token= ""
-        token=tokenService.generarToken(authentication)
+        val token = tokenService.generarToken(authentication)
 
         return ResponseEntity(
             mapOf(
@@ -53,14 +48,14 @@ class UsuarioController {
         )
     }
 
-
-
     @PostMapping("/signup")
-    fun signup(@RequestBody usuario: Usuario) : ResponseEntity<Any>? {
-
-        usuarioService.registrarUsuario(usuario)
-
-        return ResponseEntity(usuario, HttpStatus.CREATED)
+    fun signup(@RequestBody usuario: Usuario): ResponseEntity<Any>? {
+        return usuarioService.registrarUsuario(usuario)
     }
 
+    @DeleteMapping("/deleteUsuario")
+    fun deleteUsuario(@RequestBody id: Long): ResponseEntity<Any>? {
+        val usuario = usuarioService.deleteUsuario(id)
+        return ResponseEntity(usuario, HttpStatus.OK)
+    }
 }
