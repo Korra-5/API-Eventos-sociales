@@ -9,15 +9,20 @@ import com.example.API_Organizador_Eventos.service.ComunidadService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/comunidad")
 class ComunidadController {
 
+
+
     @Autowired
     private lateinit var comunidadService: ComunidadService
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/crearComunidad")
     fun crearComunidad(@RequestBody comunidad: Comunidad): ResponseEntity<Any> {
         return try {
@@ -30,6 +35,7 @@ class ComunidadController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteComunidad")
     fun deleteComunidad(@RequestBody id: Long): ResponseEntity<Any> {
         return try {
@@ -50,6 +56,7 @@ class ComunidadController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateComunidad")
     fun updateComunidad(@RequestBody comunidad: Comunidad): ResponseEntity<Any> {
         return try {
@@ -61,4 +68,6 @@ class ComunidadController {
             ResponseEntity(mapOf("error" to e.message), HttpStatus.NOT_FOUND)
         }
     }
+
+
 }

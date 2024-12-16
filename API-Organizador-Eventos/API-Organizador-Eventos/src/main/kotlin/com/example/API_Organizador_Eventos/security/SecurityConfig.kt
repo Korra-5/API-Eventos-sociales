@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
@@ -33,31 +34,40 @@ class SecurityConfig {
     private lateinit var rsaKeys: RSAKeysProperties
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity) : SecurityFilterChain {
-
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf { csrf -> csrf.disable() }
-            .authorizeHttpRequests { auth -> auth
-                .requestMatchers("/usuarios/login").permitAll()
-                .requestMatchers("/usuarios/signup").permitAll()
-                .requestMatchers(HttpMethod.DELETE,"/usuarios/deleteUsuario").permitAll()
-                .requestMatchers("/actividad/crearActividad").authenticated()
-                .requestMatchers("/comunidad/crearComunidad").authenticated()
-                .requestMatchers("/actividad/crearActividad").authenticated()
-                .requestMatchers(HttpMethod.DELETE,"/comunidad/deleteComunidad").authenticated()
-                .requestMatchers(HttpMethod.DELETE,"/actividad/deleteActividad").authenticated()
-                .requestMatchers(HttpMethod.PUT,"/comunidad/updateComunidad").authenticated()
-                .requestMatchers(HttpMethod.PUT,"/actividad/updateActividad").authenticated()
-                .requestMatchers("/comunidad/getComunidad").permitAll()
-                .requestMatchers("/actividad/getActividad").permitAll()
+            .authorizeHttpRequests { auth ->
 
+                auth.requestMatchers("/usuarios/login").permitAll()
+                auth.requestMatchers("/usuarios/signup").permitAll()
+                auth.requestMatchers(HttpMethod.DELETE, "/usuarios/deleteUsuario").authenticated()
+                auth.requestMatchers("/comunidad/getComunidad").permitAll()
+                auth.requestMatchers("/actividad/getActividad").permitAll()
+
+                auth.requestMatchers("/actividad/crearActividad")
+                    .hasRole("ADMIN")
+                auth.requestMatchers("/comunidad/crearComunidad")
+                    .hasRole("ADMIN")
+                auth.requestMatchers(HttpMethod.DELETE, "/comunidad/deleteComunidad")
+                    .hasRole("ADMIN")
+                auth.requestMatchers(HttpMethod.DELETE, "/actividad/deleteActividad")
+                    .hasRole("ADMIN")
+                auth.requestMatchers(HttpMethod.PUT, "/comunidad/updateComunidad")
+                    .hasRole("ADMIN")
+                auth.requestMatchers(HttpMethod.PUT, "/actividad/updateActividad")
+                    .hasRole("ADMIN")
             }
-
-            .oauth2ResourceServer { aauth2 ->aauth2.jwt(Customizer.withDefaults() )}
+            .oauth2ResourceServer { oauth2 -> oauth2.jwt(Customizer.withDefaults()) }
             .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .httpBasic(Customizer.withDefaults())
+            .exceptionHandling { exceptionHandling ->
+                exceptionHandling.accessDeniedHandler { request, response, accessDeniedException ->
+                    response.status = HttpStatus.FORBIDDEN.value()
+                    response.writer.write("Acceso denegado. No tienes permisos de ADMIN.")
+                }
+            }
             .build()
-
     }
 
     @Bean

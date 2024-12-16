@@ -8,6 +8,9 @@ import com.example.API_Organizador_Eventos.repository.ComunidadRepository
 import com.example.API_Organizador_Eventos.repository.UsuarioRepository
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.NoSuchElementException
@@ -23,6 +26,8 @@ class ActividadService {
 
     @Autowired
     private lateinit var comunidadRepository: ComunidadRepository
+
+
 
     fun agregarActividad(actividad: Actividad) {
         validarActividad(actividad)
@@ -95,5 +100,6 @@ class ActividadService {
             throw NotFoundException("Comunidad con id $comunidadId no encontrada")
         }
     }
+
 }
 

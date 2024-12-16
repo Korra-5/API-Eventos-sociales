@@ -1,6 +1,7 @@
 package com.example.API_Organizador_Eventos.service
 
 import com.example.API_Organizador_Eventos.controller.UsuarioController
+import com.example.API_Organizador_Eventos.error.exception.BadRequestException
 import com.example.API_Organizador_Eventos.error.exception.NotFoundException
 import com.example.API_Organizador_Eventos.model.Usuario
 import com.example.API_Organizador_Eventos.repository.UsuarioRepository
@@ -24,6 +25,10 @@ class UsuarioService : UserDetailsService {
     @Autowired
     private lateinit var usuarioRepository: UsuarioRepository
 
+    fun findByUsername(username: String): Usuario? {
+        return usuarioRepository.findByUsername(username).orElse(null)
+    }
+
     @Override
     override fun loadUserByUsername(username: String?): UserDetails {
         var usuario: Usuario = usuarioRepository
@@ -38,19 +43,19 @@ class UsuarioService : UserDetailsService {
     }
 
     fun registrarUsuario(usuario: Usuario): ResponseEntity<Any> {
-        val username = usuario.username ?: throw IllegalArgumentException("Username is null")
+        val username = usuario.username ?: throw BadRequestException("Username is null")
 
         if (username.length < 5 || username.length > 20) {
-            return ResponseEntity(mapOf("mensaje" to "El nombre de usuario debe tener entre 5 y 20 caracteres"), HttpStatus.BAD_REQUEST)
+            throw BadRequestException("El nombre de usuario debe tener entre 5 y 20 caracteres")
         }
 
         if (usuarioRepository.existsByUsername(username)) {
-            return ResponseEntity(mapOf("mensaje" to "El nombre de usuario ya está en uso"), HttpStatus.BAD_REQUEST)
+            throw BadRequestException("El nombre de usuario ya está en uso")
         }
 
-        val password = usuario.password ?: throw IllegalArgumentException("Password is null")
+        val password = usuario.password ?: throw BadRequestException("Password is null")
         if (password.length < 5 || password.length > 20) {
-            return ResponseEntity(mapOf("mensaje" to "La contraseña debe tener entre 5 y 20 caracteres"), HttpStatus.BAD_REQUEST)
+            throw BadRequestException("La contraseña debe tener entre 5 y 20 caracteres")
         }
 
         usuario.password = passwordEncoder.encode(password)
@@ -62,10 +67,10 @@ class UsuarioService : UserDetailsService {
         )
     }
 
+
     fun deleteUsuario(id: Long): Usuario {
         val usuario = usuarioRepository.findById(id)
             .orElseThrow { NotFoundException("Usuario con id $id no encontrada") }
-
         usuarioRepository.delete(usuario)
         return usuario
     }

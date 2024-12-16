@@ -8,7 +8,9 @@ import com.example.API_Organizador_Eventos.service.ActividadService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -25,6 +27,7 @@ class ActividadController {
     @Autowired
     private lateinit var actividadService: ActividadService
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/crearActividad")
     fun crearActividad(@RequestBody actividad: Actividad): ResponseEntity<Any> {
         return try {
@@ -39,6 +42,7 @@ class ActividadController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteActividad")
     fun deleteActividad(@RequestBody id: Long): ResponseEntity<Any> {
         return try {
@@ -63,6 +67,7 @@ class ActividadController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateActividad")
     fun updateActividad(@RequestBody actividad: Actividad): ResponseEntity<Any> {
         return try {
