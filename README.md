@@ -45,3 +45,96 @@ El sistema se basa en tres tablas principales: **Usuario**, **Comunidad** y **Ac
   - **Muchos a Uno** con `Comunidad`: Una actividad pertenece a una comunidad.
   - **Muchos a Uno** con `Usuario`: Una actividad tiene un organizador.
   - **Muchos a Muchos** con `Usuario`: Una actividad tiene múltiples participantes.
+ 
+  
+## Endpoints
+
+### **Usuarios**
+
+1. **POST /usuarios/signup**
+   - **Descripción:** Registra un nuevo usuario en la aplicación.
+
+2. **POST /usuarios/login**
+   - **Descripción:** Permite a un usuario autenticarse en la aplicación y obtener un token JWT.
+
+3. **DELETE /usuarios/deleteUsuario**
+   - **Descripción:** Elimina la cuenta de un usuario. Solo el administrador o el propio usuario pueden eliminar su cuenta.
+
+### **Comunidades**
+
+1. **POST /comunidad/crearComunidad**
+   - **Descripción:** Crea una nueva comunidad.
+
+2. **GET /comunidad/getComunidad**
+   - **Descripción:** Obtiene los detalles de una comunidad por su `id`.
+
+3. **PUT /comunidad/updateComunidad**
+   - **Descripción:** Actualiza la información de una comunidad.
+
+4. **DELETE /comunidad/deleteComunidad**
+   - **Descripción:** Elimina una comunidad existente.
+
+### **Actividades**
+
+1. **POST /actividad/crearActividad**
+   - **Descripción:** Crea una nueva actividad dentro de una comunidad.
+
+2. **GET /actividad/getActividad**
+   - **Descripción:** Obtiene los detalles de una actividad por su `id`.
+
+3. **PUT /actividad/updateActividad**
+   - **Descripción:** Actualiza los detalles de una actividad.
+
+4. **DELETE /actividad/deleteActividad**
+   - **Descripción:** Elimina una actividad existente.
+
+---
+
+## Lógica de Negocio
+
+### Service de Usuarios
+- Los nombres de los usuarios deberan tener una longitud de entre 5 y 20 caracteres, asií como la contraseña
+-  Los roles no pueden ser nulos (En caso de ser nulo se le adjudica un 'USER')
+- Se permiten usuarios sin comunidades y actividades asociadas, por lo tanto, se permite que sea nulo
+- No se puede eliminar un usuario que tenga en su disposicion una comunidad
+
+### Service de Comunidades
+- El nombre de la comunidad no puede ser nulo, ni superar los 30 caracteres
+- La descripcion de la comunidad se permite que sea nula, pero no superior a 100 caracteres
+- La comunidad debe tener un creador con un id valido (existente)
+- Las actividades tiene que tener una id valida (existente)
+- La fecha de creación no puede ser nula
+
+### Service de Actividades
+- El nombre de una actividad no puede exceder los 30 caracteres, así como no puede ser nula
+- La descripcion de una actividad no puede exceder los 200 caraceteres
+- El lugar de una actividad no puede ser nulo, ni exceder los 30 caracteres
+- El organizador de la actividad tiene que tener un id valido
+- Los participantes tienen que tener un id valido
+- La comunidad tiene que tener un id valido
+---
+
+## Excepciones y Códigos de Estado
+
+1. **400 Bad Request:** Cuando los datos enviados son inválidos o incompletos (por ejemplo, al crear una comunidad o actividad sin la información necesaria).
+   
+2. **401 Unauthorized:** Cuando el usuario no está autenticado o el token JWT es inválido.
+
+3. **403 Forbidden:** Cuando un usuario intenta realizar una acción para la cual no tiene permisos (por ejemplo, un usuario común intentando eliminar una comunidad o actividad).
+
+4. **404 Not Found:** Cuando el recurso solicitado no existe (por ejemplo, una comunidad o actividad con un `id` no válido).
+
+---
+
+## Restricciones de Seguridad
+
+1. **Autenticación JWT:** Todos los endpoints que requieran acceso restringido estarán protegidos por autenticación JWT. Los usuarios deberán proporcionar un token válido (ADMIN) para acceder a estas rutas.
+
+2. **Roles de Usuario:**
+   - Los usuarios pueden tener roles como `USER` o `ADMIN`.
+   - Solo los usuarios con el rol `ADMIN` pueden crear, actualizar o eliminar comunidades y actividades.
+
+3. **Cifrado de Contraseñas:** Las contraseñas de los usuarios se cifran antes de almacenarse en la base de datos.
+
+4. **Validación de Datos:** Todos los datos de entrada serán validados para evitar errores de formato. Esto incluye la validación de campos obligatorios y de evitar registros duplicados
+
